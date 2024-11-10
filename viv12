@@ -119,7 +119,7 @@ creditsButton.Parent = frame
 creditsButton.MouseButton1Click:Connect(function()
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Credits",
-        Text = "SCRIPTED BY RinkleQwert",
+        Text = "SCRIPTED BY Vax",
         Duration = 5
     })
 end)
