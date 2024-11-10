@@ -102,5 +102,27 @@ toggleButton.MouseButton1Click:Connect(function()
     executorGui.Enabled = not executorGui.Enabled
 end)
 
+-- Create Credits Button
+local creditsButton = Instance.new("TextButton")
+creditsButton.Name = "CreditsButton"
+creditsButton.Size = UDim2.new(0, 150, 0, 50)
+creditsButton.Position = UDim2.new(0, 10, 0, 270)
+creditsButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+creditsButton.BorderSizePixel = 0
+creditsButton.Text = "Credits"
+creditsButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+creditsButton.TextSize = 18
+creditsButton.Font = Enum.Font.SourceSansBold
+creditsButton.Parent = frame
+
+-- Show credits message when Credits Button is clicked
+creditsButton.MouseButton1Click:Connect(function()
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Credits",
+        Text = "SCRIPTED BY RinkleQwert",
+        Duration = 5
+    })
+end)
+
 -- Success message
-print("VIVIMI Executor and Toggle Button Loaded")
+print("VIVIMI Executor, Toggle Button, and Credits Button Loaded")
