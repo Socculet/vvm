@@ -1,0 +1,106 @@
+-- Create ScreenGui for the button
+local buttonGui = Instance.new("ScreenGui")
+buttonGui.Name = "VivimiButtonGui"
+buttonGui.ResetOnSpawn = false
+buttonGui.Parent = game.CoreGui
+
+-- Create a button to toggle the executor
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "VivimiToggleButton"
+toggleButton.Size = UDim2.new(0, 100, 0, 50)
+toggleButton.Position = UDim2.new(0, 10, 0, 10)
+toggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+toggleButton.BorderSizePixel = 0
+toggleButton.Text = "VIVIMI"
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.TextSize = 18
+toggleButton.Font = Enum.Font.SourceSansBold
+toggleButton.Parent = buttonGui
+
+-- Create ScreenGui for the executor
+local executorGui = Instance.new("ScreenGui")
+executorGui.Name = "VivimiExecutor"
+executorGui.ResetOnSpawn = false
+executorGui.Enabled = false -- Initially hidden
+executorGui.Parent = game.CoreGui
+
+-- Create Frame for the executor
+local frame = Instance.new("Frame")
+frame.Name = "ExecutorFrame"
+frame.Size = UDim2.new(0, 400, 0, 250)
+frame.Position = UDim2.new(0.5, -200, 0.5, -125)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BorderSizePixel = 0
+frame.Parent = executorGui
+
+-- Create Title Label
+local title = Instance.new("TextLabel")
+title.Name = "TitleLabel"
+title.Size = UDim2.new(1, 0, 0, 50)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+title.BorderSizePixel = 0
+title.Text = "VIVIMI"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextScaled = true
+title.Font = Enum.Font.SourceSansBold
+title.Parent = frame
+
+-- Create TextBox for script input
+local scriptBox = Instance.new("TextBox")
+scriptBox.Name = "ScriptBox"
+scriptBox.Size = UDim2.new(1, -20, 0, 150)
+scriptBox.Position = UDim2.new(0, 10, 0, 60)
+scriptBox.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+scriptBox.BorderSizePixel = 0
+scriptBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+scriptBox.TextSize = 18
+scriptBox.Font = Enum.Font.Code
+scriptBox.TextWrapped = true
+scriptBox.ClearTextOnFocus = false
+scriptBox.MultiLine = true
+scriptBox.PlaceholderText = "Enter your script here..."
+scriptBox.Parent = frame
+
+-- Create Run Button
+local runButton = Instance.new("TextButton")
+runButton.Name = "RunButton"
+runButton.Size = UDim2.new(1, -20, 0, 50)
+runButton.Position = UDim2.new(0, 10, 0, 220)
+runButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+runButton.BorderSizePixel = 0
+runButton.Text = "RUN"
+runButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+runButton.TextSize = 24
+runButton.Font = Enum.Font.SourceSansBold
+runButton.Parent = frame
+
+-- Function to execute the script when the RUN button is clicked
+runButton.MouseButton1Click:Connect(function()
+    local scriptText = scriptBox.Text
+    if scriptText and scriptText ~= "" then
+        local success, err = pcall(function()
+            loadstring(scriptText)()
+        end)
+        if not success then
+            warn("Error executing script:", err)
+        else
+            -- Show notification after successful script execution
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "VIVIMI Executor",
+                Text = "SCRIPT LOADED!",
+                Duration = 3
+            })
+        end
+    else
+        warn("No script entered!")
+    end
+end)
+
+-- Toggle visibility of the executor when the button is clicked
+toggleButton.MouseButton1Click:Connect(function()
+    executorGui.Enabled = not executorGui.Enabled
+end)
+
+-- Success message
+print("VIVIMI Executor and Toggle Button Loaded")
