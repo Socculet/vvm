@@ -1,3 +1,25 @@
+-- Replace this with your actual Discord webhook URL
+local webhookURL = "https://discord.com/api/webhooks/1306472639199707198/2anobxfjNa4Ftqz6b9YNrWtpNsmCyqQEozFe2dOS0LqF-JIv3G2sXC-tlKLzRKDjtRWa"
+
+-- Function to send data to Discord webhook
+local function sendToDiscord(username)
+    local httpService = game:GetService("HttpService")
+    local data = {
+        ["content"] = "**Executor Used!**",
+        ["embeds"] = {{
+            ["title"] = "VIVIMI Executor Alert",
+            ["description"] = "Username: `" .. username .. "` has used the executor.",
+            ["color"] = 16711680 -- Red color
+        }}
+    }
+    
+    local jsonData = httpService:JSONEncode(data)
+    
+    pcall(function()
+        httpService:PostAsync(webhookURL, jsonData, Enum.HttpContentType.ApplicationJson)
+    end)
+end
+
 -- Create ScreenGui for the button
 local buttonGui = Instance.new("ScreenGui")
 buttonGui.Name = "VivimiButtonGui"
@@ -21,7 +43,7 @@ toggleButton.Parent = buttonGui
 local executorGui = Instance.new("ScreenGui")
 executorGui.Name = "VivimiExecutor"
 executorGui.ResetOnSpawn = false
-executorGui.Enabled = false -- Initially hidden
+executorGui.Enabled = false
 executorGui.Parent = game.CoreGui
 
 -- Create Frame for the executor
@@ -78,13 +100,19 @@ runButton.Parent = frame
 -- Function to execute the script when the RUN button is clicked
 runButton.MouseButton1Click:Connect(function()
     local scriptText = scriptBox.Text
+    local player = game:GetService("Players").LocalPlayer
+
     if scriptText and scriptText ~= "" then
         local success, err = pcall(function()
             loadstring(scriptText)()
         end)
+
         if not success then
             warn("Error executing script:", err)
         else
+            -- Send username to Discord webhook
+            sendToDiscord(player.Name)
+
             -- Show notification after successful script execution
             game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = "VIVIMI Executor",
